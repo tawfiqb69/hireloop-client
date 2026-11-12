@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
+import { createJob } from "@/lib/actions/jobs"
 
 const CATEGORIES = [
   "Engineering & Tech",
@@ -48,7 +49,7 @@ const FREQUENCIES = [
   { value: "year", label: "per year" },
 ]
 
-type JobData = {
+export type JobData = {
   title: string
   company: string
   category: string
@@ -67,7 +68,7 @@ export default function NewJobPage() {
   const [jobType, setJobType] = useState<string>("Full-time")
   const [error, setError] = useState<string | null>(null)
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit (event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError(null)
 
@@ -119,6 +120,9 @@ export default function NewJobPage() {
     console.log("[new job]", job)
 
     // TODO: Send job data to API
+
+    const result = await createJob(job)
+    console.log('Created Job result:', result);
   }
 
   return (
