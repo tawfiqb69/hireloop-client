@@ -17,11 +17,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useSession, signOut } from "@/lib/auth-client";
 
-const NAV_LINKS = [
-  { label: "Browse Jobs", href: "/jobs" },
-  { label: "Company", href: "/company" },
-  { label: "Pricing", href: "/pricing" },
-];
+
 
 function Logo({ onClick }: { onClick?: () => void }) {
   return (
@@ -46,6 +42,13 @@ export function Navbar() {
   const close = () => setOpen(false);
   const { data: session } = useSession()
   console.log('user session in navbar', session);
+
+  const NAV_LINKS = [
+  { label: "Browse Jobs", href: "/jobs" },
+  { label: "Company", href: "/company" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Dashboard", href: `/dashboard/${session?.user?.role || 'seeker'}`},
+];
 
   const handleSignOut = async () => {
     await signOut();
