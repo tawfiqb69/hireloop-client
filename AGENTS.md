@@ -6,12 +6,22 @@
 - `npm run format` — Prettier only targets `**/*.{ts,tsx}`.
 - `npx shadcn@latest add <component>` — add UI components (see conventions below).
 
+## Structure
+
+- No `src/`: `app/`, `components/`, `lib/`, `hooks/` all live at the repo root; `@/*` maps there (e.g. `@/lib/utils`, `@/components/ui/button`).
+- Static design assets live in `app/images/` and are imported via `next/image` static imports (`import logo from "@/app/images/logo.png"`) — they are not served from `public/`.
+- Site chrome is mounted globally in `app/layout.tsx` (`<Navbar/>`), so it renders on every route — dashboard/admin pages will need opt-outs, not per-page nav re-adding. Public page sections are separate components (`components/Hero.tsx`, …) composed in `app/page.tsx`.
+
+## Design source of truth
+
+- Handed-off design lives at `a:\Download\hireloop-resources\hireloop.fig` (plus extracted `images/`, `logos/`, and `Project requirements.md`). Match new UI to the Figma screens and the requirements doc rather than inventing styles.
+
 ## Conventions
 
 - Formatting: Prettier enforces **no semicolons, double quotes, LF line endings** (matters on Windows). Class names in `cn`/`cva` calls are auto-sorted by `prettier-plugin-tailwindcss`.
 - Tailwind v4, CSS-first: no `tailwind.config*`; theme lives in `app/globals.css`.
 - shadcn uses the `base-nova` style backed by **Base UI (`@base-ui/react`)**, not Radix — don't rewrite installed components to Radix patterns.
-- Path alias `@/*` maps to the repo root (e.g. `@/lib/utils`, `@/components/ui/button`).
+- Fonts are Geist / Geist Mono via `next/font` in `app/layout.tsx` (`--font-sans`, `--font-mono`); use `font-sans`/`font-mono` Tailwind tokens.
 
 ## Auth (better-auth + MongoDB)
 

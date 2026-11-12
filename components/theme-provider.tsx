@@ -38,26 +38,30 @@ function ThemeHotkey() {
   const { resolvedTheme, setTheme } = useTheme()
 
   React.useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.defaultPrevented || event.repeat) {
-        return
-      }
+function onKeyDown(event: KeyboardEvent) {
+  if (event.defaultPrevented || event.repeat) {
+    return
+  }
 
-      if (event.metaKey || event.ctrlKey || event.altKey) {
-        return
-      }
+  // Autofill / password managers can fire keydown events with no `key`
+  if (!event.key) {
+    return
+  }
 
-      if (event.key.toLowerCase() !== "d") {
-        return
-      }
+  if (event.metaKey || event.ctrlKey || event.altKey) {
+    return
+  }
 
-      if (isTypingTarget(event.target)) {
-        return
-      }
+  if (event.key.toLowerCase() !== "d") {
+    return
+  }
 
-      setTheme(resolvedTheme === "dark" ? "light" : "dark")
-    }
+  if (isTypingTarget(event.target)) {
+    return
+  }
 
+  setTheme(resolvedTheme === "dark" ? "light" : "dark")
+}
     window.addEventListener("keydown", onKeyDown)
 
     return () => {

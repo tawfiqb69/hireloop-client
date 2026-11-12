@@ -15,6 +15,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { useSession, signOut } from "@/lib/auth-client";
 
 const NAV_LINKS = [
   { label: "Browse Jobs", href: "/jobs" },
@@ -43,14 +44,20 @@ function Logo({ onClick }: { onClick?: () => void }) {
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  const { data: session } = useSession()
+  console.log('user session in navbar', session);
+
+  const handleSignOut = async () => {
+    await signOut();
+  }
 
   return (
     // Fixed + transparent wrapper so the hero's grey/black background shows
     // around the floating bar, exactly like the design.
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4 lg:px-10 xl:px-[60px] xl:pt-[18px]">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4 lg:px-10 xl:px-15 xl:pt-4.5">
       <nav
         aria-label="Main"
-        className="mx-auto flex h-14 max-w-[1320px] items-center justify-between rounded-2xl bg-[#202022] px-4 shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.03)] sm:h-[60px] lg:h-[73px] lg:pl-7 lg:pr-2"
+        className="mx-auto flex h-14 max-w-330 items-center justify-between rounded-2xl bg-[#202022] px-4 shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.03)] sm:h-[60px] lg:h-[73px] lg:pl-7 lg:pr-2"
       >
         <Logo />
 
@@ -71,28 +78,47 @@ export function Navbar() {
 
           <Separator
             orientation="vertical"
-            className="mx-4 h-6 bg-white/25 lg:mx-6"
+            className="mx-4 h-10 bg-white/25 lg:mx-6"
           />
 
-          <Link
-            href="/sign-in"
-            className={cn(
-              buttonVariants({ variant: "ghost" }),
-              "h-10 px-3 text-sm font-medium text-[#7c6cf6] hover:bg-transparent hover:text-[#9a8dff] lg:h-[52px] lg:px-6 lg:text-base"
-            )}
-          >
-            Sign In
-          </Link>
+          {
+            session?.user ?
+              <>
+                <span className="text-[#EDEDEF] px-2">Welcome, {session.user.name} </span>
+                <Button
+                  onClick={handleSignOut}
+                  className={cn(
+                    buttonVariants(),
+                    "ml-3 h-10 rounded-xl bg-[#5b4bf5] px-4 text-sm font-medium text-white hover:bg-[#6c5ef7] lg:ml-4 lg:h-[52px] lg:px-6 lg:text-base"
+                  )}
+                >
+                  Sign Out
+                </Button>
+              </>
+              : <>
 
-          <Link
-            href="/get-started"
-            className={cn(
-              buttonVariants(),
-              "ml-3 h-10 rounded-xl bg-[#5b4bf5] px-4 text-sm font-medium text-white hover:bg-[#6c5ef7] lg:ml-4 lg:h-[52px] lg:px-6 lg:text-base"
-            )}
-          >
-            Get Started
-          </Link>
+                <Link
+                  href="/sign-in"
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "h-10 px-3 text-sm font-medium text-[#7c6cf6] hover:bg-transparent hover:text-[#9a8dff] lg:h-13 lg:px-6 lg:text-base"
+                  )}
+                >
+                  Sign In
+                </Link>
+
+                <Link
+                  href="/sign-up"
+                  className={cn(
+                    buttonVariants(),
+                    "ml-3 h-10 rounded-xl bg-[#5b4bf5] px-4 text-sm font-medium text-white hover:bg-[#6c5ef7] lg:ml-4 lg:h-[52px] lg:px-6 lg:text-base"
+                  )}
+                >
+                  Get Started
+                </Link>
+              </>
+          }
+
         </div>
 
         {/* Mobile */}
@@ -144,7 +170,7 @@ export function Navbar() {
                 Sign In
               </Link>
               <Link
-                href="/get-started"
+                href="/sign-up"
                 onClick={close}
                 className={cn(
                   buttonVariants(),
