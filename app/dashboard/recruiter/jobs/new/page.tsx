@@ -28,6 +28,8 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { createJob } from "@/lib/actions/jobs"
+import { toast } from "@/components/ui/toast"
+import { useRouter } from "next/navigation"
 
 const CATEGORIES = [
   "Engineering & Tech",
@@ -67,6 +69,7 @@ export type JobData = {
 export default function NewJobPage() {
   const [jobType, setJobType] = useState<string>("Full-time")
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   async function handleSubmit (event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -119,10 +122,20 @@ export default function NewJobPage() {
 
     console.log("[new job]", job)
 
+    
+
     // TODO: Send job data to API
 
     const result = await createJob(job)
-    console.log('Created Job result:', result);
+    
+    if(result.insertedId){
+      console.log('Created Job result:', result);
+      toast.add({
+        title: "Job created",
+        description: "The job has been successfully created."
+      })
+      router.push("/dashboard/recruiter/jobs")
+    }
   }
 
   return (
