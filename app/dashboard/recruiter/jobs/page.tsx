@@ -35,19 +35,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import type { JobData } from "./new/page"
+
 import { getJobs } from "@/lib/api/jobs"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
+import { JobData, JobRow } from "@/types/job"
 
-/* ------------------------------ types -------------------------------- */
-
-export type JobRow = JobData & {
-  _id: string
-  applicants: number
-  posted: string
-}
-
-/* ------------------------------ dummy data ------------------------------ 
 
 
 /* -------------------------------- helpers -------------------------------- */

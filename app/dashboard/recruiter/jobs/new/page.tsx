@@ -30,6 +30,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { createJob } from "@/lib/actions/jobs"
 import { toast } from "@/components/ui/toast"
 import { useRouter } from "next/navigation"
+import { JobData } from "@/types/job"
 
 const CATEGORIES = [
   "Engineering & Tech",
@@ -51,20 +52,7 @@ const FREQUENCIES = [
   { value: "year", label: "per year" },
 ]
 
-export type JobData = {
-  title: string
-  company: string
-  category: string
-  type: string
-  isRemote: boolean
-  location: string
-  deadline: string
-  minSalary: number | null
-  maxSalary: number | null
-  frequency: string
-  responsibilities: string
-  requirements: string
-}
+
 
 export default function NewJobPage() {
   const [jobType, setJobType] = useState<string>("Full-time")
